@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="cashier_group" model="res.groups">
+            <field name="name">Cashier</field>
+            <field name="implied_ids" eval="[(4, ref('del_payment_approval_cashier.payment_approval_group'))]"/>
+        </record>
+
+ <record id="payment_approval_group" model="res.groups">
+            <field name="name">Payment Approval</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

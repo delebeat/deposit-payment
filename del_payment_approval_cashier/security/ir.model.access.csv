@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payment_approval_cashier_group,payment.approval,model_payment_approval,cashier_group,1,1,1,1
+access_payment_approval_payment_approval_group,payment.approval,model_payment_approval,payment_approval_group,1,1,1,1
+access_user_journal_settings,user.journal.settings,model_user_journal_settings,payment_approval_group,1,1,1,1

@@ -1,0 +1,122 @@
+<odoo>
+  <data>
+      <!-- Inherit Form View to Modify it -->
+      <record id="account_view_account_payment_form_inherit" model="ir.ui.view">
+          <field name="name">account.payment</field>
+          <field name="model">account.payment</field>
+          <field name="inherit_id" ref="account.view_account_payment_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='ref']" position="before">
+                  <field name="bank_ref_no"/>
+              </xpath>
+          </field>
+      </record>
+
+    <record id="view_payment_approval_form" model="ir.ui.view">
+        <field name="name">payment.approval.form</field>
+        <field name="model">payment.approval</field>
+        <field name="arch" type="xml">
+            <form string="Payment Approval">
+              <header>
+                <button name="action_submit_for_approval"
+                        string="Submit for Approval" type="object" states="draft" class="btn-primary"
+                        groups="del_payment_approval_cashier.cashier_group"/>
+
+<!--                 <button name="action_approve"-->
+<!--                        string="Approve" type="object" states="submitted" class="btn-primary"-->
+<!--                 groups="del_payment_approval_cashier.payment_approval_group"/>-->
+                  <button name="button_create_journal_entry"
+                        string="Approve" type="object" states="submitted" class="btn-primary"
+                 groups="del_payment_approval_cashier.payment_approval_group"/>
+
+<!--                 <button name="action_approve"-->
+<!--                        string="Submit for Approval" type="object" states="submitted" class="btn-primary"/>-->
+
+                <field name="state" widget="statusbar"
+                       statusbar_visible="draft,submitted,approved" statusbar_colors="{'KEY_IS_STATE':'VALUE_IS_COLOR'}"/>
+              </header>
+                <sheet>
+                    <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="reference"/>
+
+<!--                        <field name="description"/>-->
+                        <field name="submitted_by"/>
+                    </group>
+                         <group>
+                            <field name="payment_date"/>
+                             <field name="from_journal_destination"/>
+                             <field name="analytic_account_id"/>
+                            <field name="account_id_from" readonly="1"/>
+                            <field name="account_from_balance" readonly="1"/>
+                             <field name="account_id_to"/>
+<!--                            <field name="approval_id"/>-->
+                            <field name="amount"/>
+                    </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree view for displaying a list of PaymentApproval records -->
+    <record id="view_payment_approval_tree" model="ir.ui.view">
+        <field name="name">payment.approval.tree</field>
+        <field name="model">payment.approval</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Approvals">
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="submitted_by"/>
+                <field name="payment_date"/>
+                <field name="account_id_from"/>
+                <field name="account_id_to"/>
+                <field name="account_from_balance"/>
+                <field name="amount"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action for displaying the list of PaymentApproval records -->
+    <record id="action_payment_approval_tree" model="ir.actions.act_window">
+        <field name="name">Payment/Deposit Approval</field>
+        <field name="res_model">payment.approval</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+      <record id="user_journal_settings_action" model="ir.actions.act_window">
+          <field name="name">User Journal Settings</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">user.journal.settings</field>
+          <field name="view_mode">tree,form</field>
+      </record>
+
+    <!-- Menu item to navigate to Payment Approval records -->
+    <menuitem id="menu_payment_approval" name="Payment/Deposit Approval"
+              sequence="10" web_icon="del_payment_approval_cashier,static/description/icon.png"/>
+      <!-- This Menu Item Must have a parent -->
+      <menuitem id="UNIQUE_ID_categ_menu_payment_approval"  name="configuration"
+                parent="menu_payment_approval" sequence="5" />
+
+      <menuitem id="UNIQUE_ID_categ_menu_payment_approval" name="Configuration"
+          parent="menu_payment_approval" sequence="5" groups="del_payment_approval_cashier.payment_approval_group"/>
+
+
+      <!-- This Menu Item must have a parent and an action -->
+      <menuitem id="UNIQUE_ID_categ_action_payment_approval"
+                parent="UNIQUE_ID_categ_menu_payment_approval"
+                action="user_journal_settings_action" sequence="1" groups="payment_approval_group"/>
+
+    <menuitem id="menu_payment_approval_list" name="Payment Approvals"
+              parent="menu_payment_approval"
+              action="action_payment_approval_tree" sequence="1"/>
+
+  </data>
+</odoo>
